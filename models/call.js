@@ -10,11 +10,12 @@ const positiveNum = function(value) {
     }
 }
 
-const Schema = mongoose.Schema;
-
 const callSchema = new mongoose.Schema({
-    id: {
-        type: Schema.Types.ObjectId,
+    _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        index: true,
+        required: true,
+        auto: true,
     },
     name: {
         type: String,
