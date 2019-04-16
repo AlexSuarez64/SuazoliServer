@@ -6,6 +6,7 @@ const app = express();
 
 require("./startup/logging")();
 require("./startup/cors")(app);
+require("./startup/helmet")(app);
 require("./startup/routes")(app);
 require("./startup/db")();
 require("./startup/config")();
