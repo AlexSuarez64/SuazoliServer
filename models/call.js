@@ -60,12 +60,12 @@ const callSchema = new mongoose.Schema({
 //     this.id = this.get('_id'); // considering _id is input by client
 //     next();
 // });
-const Call = mongoose.model('Call', callSchema);
 
 // callSchema.virtual('id').get(function() {
 //     return this._id;
 // });
-
+    
+const Call = mongoose.model('Call', callSchema);
 
 function validate(call) {
     const schema = {
