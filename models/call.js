@@ -13,7 +13,6 @@ const positiveNum = function(value) {
 const callSchema = new mongoose.Schema({
     _id: {
         type: mongoose.Schema.Types.ObjectId,
-        index: true,
         required: true,
         auto: true,
     },
@@ -57,11 +56,16 @@ const callSchema = new mongoose.Schema({
     }
 });
 
-callSchema.virtual('hasName').get(function() {
-    return this.name.length > 0;
-});
+// callSchema.pre('save', function (next) {
+//     this.id = this.get('_id'); // considering _id is input by client
+//     next();
+// });
+const Call = mongoose.model('Call', callSchema);
 
-const Call = mongoose.model("Call", callSchema);
+// callSchema.virtual('id').get(function() {
+//     return this._id;
+// });
+
 
 function validate(call) {
     const schema = {
