@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get("/", auth, async(req, res) => {
     const calls = await Call.find()
+        .populate('id')
         .select("-__v")
         .sort("name");
     res.send(calls);

@@ -64,6 +64,16 @@ const callSchema = new mongoose.Schema({
 // callSchema.virtual('id').get(function() {
 //     return this._id;
 // });
+
+callSchema.virtual('id',{
+    localField: 'id',
+    foreignField: '_id',
+    justOne: true
+});
+
+callSchema.set('toObject', { virtuals: true });
+callSchema.set('toJSON', { virtuals: true });
+
     
 const Call = mongoose.model('Call', callSchema);
 
