@@ -1,9 +1,10 @@
-const { Call, validate } = require("../models/call");
+const { Call } = require("../models/call");
 const auth = require("../middleware/auth");
 const express = require("express");
+const winston = require("winston");
 const router = express.Router();
 
-router.get("/", auth, async(req, res) => {
+router.get("/", auth, async (req, res) => {
     const calls = await Call.find()
         .populate('id')
         .select("-__v")
@@ -11,27 +12,47 @@ router.get("/", auth, async(req, res) => {
     res.send(calls);
 });
 
-router.post("/", auth, async(req, res) => {
-    const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+router.post("/", auth, async (req, res) => {
 
-    const call = new Call({
+    let call = new Call({
         name: req.body.name,
         description: req.body.description,
         priority: req.body.priority,
-        startDate: req.body.startDate,
-        completionDate: req.body.completionDate
+        startDate: req.body.startDate
     });
-    call = await call.save();
+
+    call.validate(function (error) {
+        if (error) {
+            if (error) winston.error(`Validation: ${error.details[0].message}`);
+            if (error) return res.status(400).send(`Validation: ${error.details[0].message}`);
+        }
+    });
+
+    winston.info(`Validation done.`);
+
+    call = await call.save(function (err) {
+        if (err) winston.error(`Save: ${err.details[0].message}`);
+        if (err) return res.status(400).send(`Save: ${err.details[0].message}`);
+        res.send(call);
+    });
 
     res.send(call);
 });
 
-router.put("/:id", auth, async(req, res) => {
-    const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+router.put("/:id", auth, async (req, res) => {
 
-    const call = await Call.findByIdAndUpdate(
+    let call = new Call(req.body);
+
+    call.validate(function (error) {
+        if (error) {
+            if (error) winston.error(`Validation: ${error.details[0].message}`);
+            if (error) return res.status(400).send(`Validation: ${error.details[0].message}`);
+        }
+    });
+
+    winston.info(`Validation done.`);
+
+    call = await Call.findByIdAndUpdate(
         req.params.id, {
             name: req.body.name,
             description: req.body.description,
@@ -50,7 +71,7 @@ router.put("/:id", auth, async(req, res) => {
     res.send(call);
 });
 
-router.delete("/:id", auth, async(req, res) => {
+router.delete("/:id", auth, async (req, res) => {
     const call = await Call.findByIdAndRemove(req.params.id);
 
     if (!call)
@@ -61,7 +82,7 @@ router.delete("/:id", auth, async(req, res) => {
     res.send(call);
 });
 
-router.get("/:id", auth, async(req, res) => {
+router.get("/:id", auth, async (req, res) => {
     const call = await Call.findById(req.params.id).select("-__v");
 
     if (!call)

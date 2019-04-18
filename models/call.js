@@ -1,7 +1,7 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
 
-const enumPriorities = ['High', 'Medium', 'Low'];
+const Priorities = ['High', 'Medium', 'Low'];
 const positiveNum = function(value) {
     if (value < 0) {
         return false;
@@ -34,7 +34,7 @@ const callSchema = new mongoose.Schema({
     priority: {
         type: String,
         required: true,
-        enum: enumPriorities,
+        enum: Priorities,
         trim: true
     },
     startDate: {
@@ -46,15 +46,13 @@ const callSchema = new mongoose.Schema({
     },
     createdOn: {
         type: Date,
-        default: Date.now,
-        required: true
+        default: Date.now
     },
     updatedOn: {
         type: Date,
-        default: Date.now,
-        required: true
+        default: Date.now
     }
-});
+}, { strict: false } );
 
 // callSchema.pre('save', function (next) {
 //     this.id = this.get('_id'); // considering _id is input by client
@@ -73,28 +71,7 @@ callSchema.virtual('id',{
 
 callSchema.set('toObject', { virtuals: true });
 callSchema.set('toJSON', { virtuals: true });
-
     
 const Call = mongoose.model('Call', callSchema);
 
-function validate(call) {
-    const schema = {
-        name: Joi.string()
-            .min(5)
-            .max(255)
-            .required(),
-        description: Joi.string()
-            .min(5)
-            .max(1024)
-            .required(),
-        priority: Joi.string()
-            .required(),
-        startDate: Joi.Date()
-            .required(),
-    };
-
-    return Joi.validate(call, schema);
-}
-
 exports.Call = Call;
-exports.validate = validate;
