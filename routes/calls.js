@@ -42,6 +42,7 @@ router.put("/:id", auth, async (req, res) => {
         }
     });
     winston.info(`Validation done.`);
+    req.body.updatedOn = Date.now();
 
     call = await Call.findByIdAndUpdate(
         req.params.id, {
@@ -50,7 +51,7 @@ router.put("/:id", auth, async (req, res) => {
             priority: req.body.priority,
             startDate: req.body.startDate,
             completionDate: req.body.completionDate,
-            updatedOn: Date.now
+            updatedOn: req.body.updatedOn
         }, { new: true }
     );
 
