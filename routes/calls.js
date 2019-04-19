@@ -65,7 +65,7 @@ router.put("/:id", auth, async (req, res) => {
 });
 
 router.delete("/:id", auth, async (req, res) => {
-    const call = await Call.findByIdAndRemove(req.params.id);
+    const call = await Call.findByIdAndDelete(req.params.id);
 
     if (!call)
         return res
