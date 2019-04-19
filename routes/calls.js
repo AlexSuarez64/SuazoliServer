@@ -26,10 +26,10 @@ router.post("/", auth, async (req, res) => {
             if (error) return res.status(400).send(`Validation: ${error.details[0].message}`);
         }
     });
-    winston.info(`Validation done.`);
+    // winston.info(`Validation done.`);
 
     await call.save();
-    winston.info(`Save done.`);
+    // winston.info(`Save done.`);
     return res.send(call);
 });
 
@@ -41,7 +41,7 @@ router.put("/:id", auth, async (req, res) => {
             if (error) return res.status(400).send(`Validation: ${error.details[0].message}`);
         }
     });
-    winston.info(`Validation done.`);
+    // winston.info(`Validation done.`);
     req.body.updatedOn = Date.now();
 
     call = await Call.findByIdAndUpdate(
@@ -60,7 +60,7 @@ router.put("/:id", auth, async (req, res) => {
             .status(404)
             .send("The Call with the given ID was not found.");
 
-    winston.info(`Update done.`);
+    // winston.info(`Update done.`);
     res.send(call);
 });
 
