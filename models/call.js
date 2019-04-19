@@ -21,7 +21,6 @@ const callSchema = new mongoose.Schema({
         required: true,
         minlength: 5,
         maxlength: 255,
-        unique: true,
         trim: true
     },
     description: {
@@ -49,8 +48,7 @@ const callSchema = new mongoose.Schema({
         default: Date.now
     },
     updatedOn: {
-        type: Date,
-        default: Date.now
+        type: Date
     }
 }, { strict: false } );
 
