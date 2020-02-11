@@ -120,7 +120,12 @@ const calls = [{
 
 
 async function seed() {
-    await mongoose.connect(config.get("db"), { useNewUrlParser: true });
+    await mongoose.connect(config.get("db"), {
+        useNewUrlParser: true,
+        useCreateIndex: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false
+      });
     await Call.deleteMany({});
 
     for (let c of calls) {
